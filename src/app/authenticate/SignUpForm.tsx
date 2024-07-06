@@ -51,10 +51,10 @@ const SignUpForm = () => {
   }
 
   return (
-    <Card>
+    <Card className="min-w-[500px]">
       <CardHeader>
-        <CardTitle>Welcome back!</CardTitle>
-        <CardDescription>Sign in to your account to continue</CardDescription>
+        <CardTitle>Begin your journey...</CardTitle>
+        <CardDescription>Create your account to continue</CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
         <Form {...form}>
@@ -62,6 +62,19 @@ const SignUpForm = () => {
             className="flex flex-col gap-2"
             onSubmit={form.handleSubmit(onSubmit)}
           >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your name..." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -100,8 +113,29 @@ const SignUpForm = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Confirm your password..."
+                      {...field}
+                      onChange={(e) => {
+                        e.target.value = e.target.value.trim();
+                        field.onChange(e);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <Button type="submit" className="self-start">
-              Login
+              Sign Up
             </Button>
           </form>
         </Form>
