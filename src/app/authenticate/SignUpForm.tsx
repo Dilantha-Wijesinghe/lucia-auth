@@ -21,6 +21,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { signUp } from "./auth.action";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const signUpSchema = z
   .object({
@@ -35,6 +37,7 @@ export const signUpSchema = z
   });
 
 const SignUpForm = () => {
+  const router = useRouter();
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -48,7 +51,13 @@ const SignUpForm = () => {
   // submit handler
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
     console.log(values);
-    await signUp(values);
+    const res = await signUp(values);
+    if (res.success) {
+      toast.success("Account created successfully");
+      router.push("/dashboard");
+    } else {
+      toast.error(res.error);
+    }
   }
 
   return (
