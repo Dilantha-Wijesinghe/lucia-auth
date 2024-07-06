@@ -20,6 +20,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { signUp } from "./auth.action";
 
 export const signUpSchema = z
   .object({
@@ -45,8 +46,9 @@ const SignUpForm = () => {
   });
 
   // submit handler
-  function onSubmit(values: z.infer<typeof signUpSchema>) {
+  async function onSubmit(values: z.infer<typeof signUpSchema>) {
     console.log(values);
+    await signUp(values);
   }
 
   return (
