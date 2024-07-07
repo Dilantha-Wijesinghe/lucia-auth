@@ -7,6 +7,7 @@ import { Argon2id } from "oslo/password";
 import { lucia } from "@/lib/lucia";
 import { cookies } from "next/headers";
 import { signInSchema } from "./SignInForm";
+import { redirect } from "next/navigation";
 
 export const signUp = async (values: z.infer<typeof signUpSchema>) => {
   console.log("signing up with values", values);
@@ -68,4 +69,14 @@ export const signIn = async (values: z.infer<typeof signInSchema>) => {
     sessionCookie.attributes
   );
   return { success: true };
+};
+
+export const signOut = async () => {
+  const sessionCookie = await lucia.createBlankSessionCookie();
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes
+  );
+  return redirect("/authenticate");
 };

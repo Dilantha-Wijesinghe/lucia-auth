@@ -16,13 +16,13 @@ export const lucia = new Lucia(adapter, {
 });
 
 export const getUser = async () => {
-  const sessionId = cookies().get(lucia.sessionCookieName)?.value || null;
+  const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
   if (!sessionId) {
     return null;
   }
   const { session, user } = await lucia.validateSession(sessionId);
   try {
-    if (session && session.fresh) {
+    if (session?.fresh) {
       // refresh the session cookie
       const sessionCookie = await lucia.createSessionCookie(session.id);
       cookies().set(
@@ -40,4 +40,15 @@ export const getUser = async () => {
       );
     }
   } catch (error) {}
+
+  const dbUser = await prisma.user.findUnique({
+    where: {
+      id: user?.id,
+    },
+    select: {
+      name: true,
+      email: true,
+    },
+  });
+  return dbUser;
 };
