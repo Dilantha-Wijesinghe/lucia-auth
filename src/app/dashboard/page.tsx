@@ -1,6 +1,7 @@
-import React from "react";
+import { getUser } from "@/lib/lucia";
 
-const DashboardPage = () => {
+const DashboardPage = async () => {
+  const user = await getUser();
   return <div>Dashboard</div>;
 };
 
